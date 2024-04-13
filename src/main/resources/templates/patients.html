@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="template1">
 <head>
     <meta charset="UTF-8">
     <title>Hopital | Home</title>
@@ -8,65 +11,70 @@
 <body>
 
 
-
-<div class="p-3">
-    <div class="card">
-        <div class="card-header">
-            <h2>Liste des patients</h2>
-        </div>
-        <div class="card-body">
-
-            <form  th:action="@{/index}">
-                <label class="form-label">
-                    keyword
-                </label>
-                <input class="form-control-sm" type="text" name="keyword" th:value="${keyword}">
-                <button class="btn btn-info">chercher</button>
-            </form>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>nom</th>
-                    <th>date</th>
-                    <th>malade</th>
-                    <th>score</th>
-                    <th>action</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr th:each="p:${patientList}">
-                    <td th:text="${p.id}"></td>
-                    <td th:text="${p.nom}"></td>
-                    <td th:text="${p.dateNaissance}"></td>
-                    <td th:text="${p.malade}"></td>
-                    <td th:text="${p.score}"></td>
-                    <td><a class="btn btn-danger" th:href="@{/delete(id=${p.id},page=${currentPage},keyword=${keyword})}">del</a></td>
-                </tr>
-                </tbody>
-
-            </table>
-
-
-        </div>
-        <div class="card-footer d-flex">
-            <div>
-                <ul class="nav nav-pills">
-                    <li th:each="page,status:${totalPages}">
-                        <a th:class="${ currentPage==status.index ?'btn btn-info me-1' : 'btn btn-outline-info me-1'}" th:text="${status.index}" th:href="@{/index(page=${status.index},keyword=${keyword})}"></a>
-
-                    </li>
-                </ul>
+<div layout:fragment="content1">
+    <div class="p-3">
+        <div class="card">
+            <div class="card-header">
+                <h2>Liste des patients</h2>
             </div>
-            <div>
+            <div class="card-body">
+
+                <form  th:action="@{/index}">
+                    <label class="form-label">
+                        keyword
+                    </label>
+                    <input class="form-control-sm" type="text" name="keyword" th:value="${keyword}">
+                    <button class="btn btn-info">chercher</button>
+                </form>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>nom</th>
+                        <th>date</th>
+                        <th>malade</th>
+                        <th>score</th>
+                        <th>action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="p:${patientList}">
+                        <td th:text="${p.id}"></td>
+                        <td th:text="${p.nom}"></td>
+                        <td th:text="${p.dateNaissance}"></td>
+                        <td th:text="${p.malade}"></td>
+                        <td th:text="${p.score}"></td>
+                        <td class="d-flex">
+                            <a class="btn btn-danger" th:href="@{/delete(id=${p.id},page=${currentPage},keyword=${keyword})}">del</a>
+                            <a class="btn btn-primary" th:href="@{/editPatient(id=${p.id},page=${currentPage},keyword=${keyword})}">edit</a>
+                        </td>
+                    </tr>
+                    </tbody>
+
+                </table>
+
 
             </div>
+            <div class="card-footer d-flex">
+                <div>
+                    <ul class="nav nav-pills">
+                        <li th:each="page,status:${totalPages}">
+                            <a th:class="${ currentPage==status.index ?'btn btn-info me-1' : 'btn btn-outline-info me-1'}" th:text="${status.index}" th:href="@{/index(page=${status.index},keyword=${keyword})}"></a>
+
+                        </li>
+                    </ul>
+                </div>
+                <div>
+
+                </div>
+
+            </div>
 
         </div>
-
     </div>
 </div>
+
 
 
 
