@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ public class PatientContoller {
     private PatientRepository patientRepository;
 
     @GetMapping("index")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public String index(Model model,
                         @RequestParam(name = "page" , defaultValue = "0") int  page,
                         @RequestParam(name = "size" ,defaultValue = "10")int size,
@@ -36,6 +38,7 @@ public class PatientContoller {
     }
 
     @GetMapping("formPatient")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String addPatient(Model model
 
     ){
@@ -45,6 +48,7 @@ public class PatientContoller {
     }
 
     @GetMapping("editPatient")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String editPatient(Model model,
                               @RequestParam(name = "id") Long id,
                               @RequestParam(name = "page" , defaultValue = "0") int  page,
@@ -63,6 +67,7 @@ public class PatientContoller {
     }
 
     @PostMapping("edit")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String updatePatient(Model model, @Valid Patient patient, BindingResult bindingResult
     ){
         if (bindingResult.hasErrors())return "editPatient";
@@ -72,6 +77,7 @@ public class PatientContoller {
     }
 
     @PostMapping("save")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String savePatient(Model model, @Valid Patient patient, BindingResult bindingResult,
 
                               @RequestParam(name = "page" , defaultValue = "0") int  page,
@@ -86,6 +92,7 @@ public class PatientContoller {
         return "redirect:/index?page="+page+"&keyword="+kw;
     }
     @GetMapping("delete")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String delete(Model model,
                         @RequestParam(name = "page" , defaultValue = "0") int  page,
                         @RequestParam(name = "size" ,defaultValue = "10")int size,
@@ -96,5 +103,11 @@ public class PatientContoller {
         patientRepository.deleteById(id);
 
         return "redirect:/index?page="+page+"&keyword="+kw;
+    }
+
+
+    @GetMapping("")
+    public String home(){
+        return "redirect:index";
     }
 }
